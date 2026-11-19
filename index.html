@@ -1,0 +1,687 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Zdam B1 — тренажер до іспиту з польської B1</title>
+<meta name="description" content="Тренажер до державного іспиту з польської мови B1: граматика, читання, аудіювання і письмо з шаблонами. Інтерфейс українською та російською.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Literata:opsz,wght@7..72,500;7..72,700&display=swap">
+<style>
+:root{
+  --paper:#f4f3ef; --card:#fff; --ink:#1c1f2a; --muted:#5e6475; --line:#dcdad2; --soft:#ecebe5;
+  --red:#c8102e; --red-soft:#fbe7ea; --ok:#1d7448; --ok-soft:#e1f2e8; --warn:#9a6100; --warn-soft:#fbf0dc;
+  --f-display:"Literata",Georgia,serif; --f-body:"IBM Plex Sans","Segoe UI",Roboto,Arial,sans-serif; --f-mono:"IBM Plex Mono",Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root{
+  --paper:#121318; --card:#1b1d24; --ink:#e8e8ec; --muted:#9da1ae; --line:#2e313b; --soft:#23252e;
+  --red:#ff6b7f; --red-soft:#3a1c22; --ok:#55c98f; --ok-soft:#15301f; --warn:#e2a640; --warn-soft:#33270f; color-scheme:dark;}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 var(--f-body)}
+a{color:var(--red)}
+button,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+h1,h2,h3{font-family:var(--f-display);line-height:1.2;margin:0;text-wrap:balance}
+h1{font-size:clamp(1.7rem,4.5vw,2.6rem)} h2{font-size:1.4rem} h3{font-size:1.1rem;font-weight:500}
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+.muted{color:var(--muted)} .mono{font-family:var(--f-mono)}
+.label{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+[hidden]{display:none!important}
+
+/* top */
+.top{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:14px;min-height:56px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--ink);font-family:var(--f-display);font-weight:700;font-size:1.15rem}
+.flag{width:22px;height:15px;border:1px solid var(--line);border-radius:2px;background:linear-gradient(#fff 50%,#c8102e 50%)}
+.nav{display:flex;gap:4px;flex-wrap:wrap;flex:1}
+.nav a{padding:6px 10px;border-radius:8px;text-decoration:none;color:var(--muted);font-weight:500;font-size:.95rem}
+.nav a.on,.nav a:hover{background:var(--soft);color:var(--ink)}
+.lang{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.lang button{border:0;background:none;padding:5px 10px;cursor:pointer;font-weight:600;font-size:.85rem;color:var(--muted)}
+.lang button.on{background:var(--ink);color:var(--card)}
+@media (max-width:640px){
+  .top{position:static}
+  .top .wrap{gap:8px;padding-top:8px}
+  .lang{margin-left:auto}
+  .nav{order:3;flex:0 0 100%;flex-wrap:nowrap;overflow-x:auto;padding-bottom:8px;scrollbar-width:none}
+  .nav a{white-space:nowrap}
+  .testhead{top:0!important}
+}
+
+main{padding:28px 0 60px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);background:var(--card);padding:9px 16px;border-radius:10px;cursor:pointer;font-weight:600;text-decoration:none;color:var(--ink)}
+.btn:hover{border-color:var(--ink)}
+.btn.primary{background:var(--red);border-color:var(--red);color:#fff}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.small{padding:5px 11px;font-size:.88rem}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.spacer{flex:1}
+.pill{display:inline-block;padding:2px 9px;border-radius:99px;font-size:.78rem;font-weight:600;background:var(--soft);color:var(--muted)}
+.pill.red{background:var(--red-soft);color:var(--red)} .pill.ok{background:var(--ok-soft);color:var(--ok)} .pill.warn{background:var(--warn-soft);color:var(--warn)}
+
+/* home */
+.hero{display:grid;grid-template-columns:1.4fr 1fr;gap:20px;align-items:stretch;margin-bottom:22px}
+@media (max-width:760px){.hero{grid-template-columns:1fr}}
+.count{display:flex;flex-direction:column;justify-content:center;text-align:center;background:var(--ink);color:var(--card);border-color:var(--ink)}
+.count .big{font-family:var(--f-display);font-size:3.6rem;font-weight:700;line-height:1}
+.count .muted{color:color-mix(in srgb,var(--card) 70%,transparent)}
+.sec{display:flex;flex-direction:column;gap:10px;text-decoration:none;color:var(--ink);transition:border-color .15s}
+.sec:hover{border-color:var(--ink)}
+.sec .ico{font-size:1.6rem}
+.bar{height:6px;background:var(--soft);border-radius:9px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ok);border-radius:9px}
+.star{border-color:var(--red);box-shadow:0 0 0 1px var(--red) inset}
+
+/* test */
+.testhead{position:sticky;top:57px;z-index:10;background:var(--paper);padding:10px 0;margin-bottom:10px;border-bottom:1px solid var(--line)}
+.timer{font-family:var(--f-mono);font-weight:600;font-size:1.15rem;padding:4px 12px;border-radius:8px;background:var(--card);border:1px solid var(--line)}
+.timer.low{color:var(--red);border-color:var(--red)}
+.q{margin:14px 0;padding:16px;background:var(--card);border:1px solid var(--line);border-radius:12px}
+.q .qt{font-weight:500;margin-bottom:10px}
+.q .num{font-family:var(--f-mono);color:var(--muted);margin-right:6px}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:10px;align-items:center;padding:9px 12px;border:1px solid var(--line);border-radius:9px;cursor:pointer;background:var(--card)}
+.opt:hover{border-color:var(--muted)}
+.opt input{accent-color:var(--red);width:18px;height:18px;margin:0}
+.opt.sel{border-color:var(--ink);background:var(--soft)}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)}
+.opt.wrong{border-color:var(--red);background:var(--red-soft)}
+.tf{grid-template-columns:1fr 1fr}
+.expl{margin-top:10px;padding:10px 12px;border-left:3px solid var(--ok);background:var(--ok-soft);border-radius:0 8px 8px 0;font-size:.94rem}
+.expl.bad{border-color:var(--red);background:var(--red-soft)}
+.text{white-space:pre-wrap;font-family:var(--f-display);font-size:1.02rem;line-height:1.7;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+.split > .stick{position:sticky;top:120px;max-height:calc(100vh - 140px);overflow:auto}
+@media (max-width:860px){.split{grid-template-columns:1fr}.split > .stick{position:static;max-height:none}}
+.result{text-align:center;padding:26px}
+.result .big{font-family:var(--f-display);font-size:3rem;font-weight:700}
+.player{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:14px;background:var(--card);border:1px solid var(--line);border-radius:12px;margin:10px 0}
+.transcript{font-size:.94rem;background:var(--soft);border-radius:10px;padding:12px;margin-top:8px}
+.transcript p{margin:4px 0}
+
+/* writing */
+.tasks{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.task{display:flex;flex-direction:column;gap:6px;text-decoration:none;color:var(--ink)}
+.task:hover{border-color:var(--ink)}
+.wgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:18px;align-items:start}
+@media (max-width:900px){.wgrid{grid-template-columns:1fr}}
+.prompt{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--red);border-radius:12px;padding:16px}
+.prompt ul{margin:8px 0 0;padding-left:20px}
+.tabs{display:flex;gap:4px;margin:16px 0 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.tabs button{border:0;background:none;padding:8px 12px;cursor:pointer;font-weight:600;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs button.on{color:var(--ink);border-color:var(--red)}
+.tabpane{padding:14px 0}
+.part{display:grid;grid-template-columns:28px 1fr;gap:10px;padding:10px 0;border-bottom:1px dashed var(--line)}
+.part b.n{font-family:var(--f-mono);color:var(--red)}
+.part code{display:block;margin-top:4px;font-family:var(--f-display);font-style:italic;color:var(--ink);font-size:.95rem}
+.phr-group{margin-bottom:14px}
+.phr{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.phr button{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:5px 9px;cursor:pointer;text-align:left;font-size:.9rem;line-height:1.3}
+.phr button:hover{border-color:var(--red)}
+.phr button small{display:block;color:var(--muted);font-size:.78rem}
+.editor{position:sticky;top:70px}
+@media (max-width:900px){.editor{position:static}}
+textarea.essay{width:100%;min-height:340px;resize:vertical;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--card);font-family:var(--f-display);font-size:1.05rem;line-height:1.65}
+textarea.essay:focus{outline:2px solid var(--red);border-color:transparent}
+.wc{font-family:var(--f-mono);font-weight:600}
+.checks label{display:flex;gap:9px;align-items:flex-start;padding:5px 0;cursor:pointer;font-size:.94rem}
+.checks input{accent-color:var(--ok);width:17px;height:17px;margin-top:3px;flex:none}
+.hints{display:grid;gap:6px;margin:10px 0}
+.hint{font-size:.9rem;padding:7px 10px;border-radius:8px}
+.hint.ok{background:var(--ok-soft);color:var(--ok)} .hint.bad{background:var(--warn-soft);color:var(--warn)}
+.model{white-space:pre-wrap;font-family:var(--f-display);background:var(--soft);border-radius:10px;padding:14px;line-height:1.65}
+.foot{border-top:1px solid var(--line);padding:22px 0;font-size:.88rem;color:var(--muted)}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:var(--card);padding:10px 18px;border-radius:10px;font-weight:500;z-index:50;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#/"><span class="flag" aria-hidden="true"></span>Zdam B1</a>
+    <nav class="nav" id="nav"></nav>
+    <div class="lang" role="group" aria-label="Мова / Язык">
+      <button data-lang="ua">UA</button><button data-lang="ru">RU</button>
+    </div>
+  </div>
+</header>
+<main><div class="wrap" id="app"></div></main>
+<footer class="foot"><div class="wrap" id="foot"></div></footer>
+<div class="toast" id="toast"></div>
+
+<script src="data/grammar.js?v=1"></script>
+<script src="data/reading.js?v=1"></script>
+<script src="data/listening.js?v=1"></script>
+<script src="data/writing.js?v=1"></script>
+<script>
+"use strict";
+/* ================= i18n ================= */
+const T = {
+  ua: {
+    nav_home:"Головна", nav_g:"Граматика", nav_r:"Читання", nav_l:"Аудіювання", nav_w:"Письмо",
+    hero_t:"Підготовка до іспиту з польської B1", hero_p:"Тести з таймером, пояснення помилок українською і тренажер письма з шаблонами та банком фраз. Вчися блоками по 15 хвилин.",
+    days:"днів до іспиту", exam_date:"Письмова частина: 5 грудня 2026", start_block:"Почати 15-хвилинний блок", today:"Порада на сьогодні",
+    sec_g:"Граматика", sec_r:"Читання", sec_l:"Аудіювання", sec_w:"Письмо",
+    sec_g_d:"Відмінки, вид дієслова, числівники, прийменники. Пояснення кожної помилки.",
+    sec_r_d:"Оголошення, листи, статті. Питання з вибором і «правда / неправда».",
+    sec_l_d:"Діалоги і оголошення озвучує синтезатор (pl-PL). Як на іспиті — максимум 2 прослуховування.",
+    sec_w_d:"Головна фішка: шаблони, банк фраз, лічильник слів, таймер і чек-лист самоперевірки.",
+    best:"Найкращий результат", attempts:"Спроб", none:"ще немає", texts:"текстів",
+    mistakes:"Повторити помилки", mistakes_n:"помилок у банку",
+    mode_block:"Блок 15 хв", mode_block_d:"Випадкова частина завдань", mode_full:"Повний варіант", mode_full_d:"Всі завдання розділу",
+    start:"Почати", finish:"Завершити і перевірити", time_up:"Час вийшов — перевіряємо!", left:"залишилось",
+    answered:"відповідей", score:"Результат", again:"Ще раз", home:"На головну", review:"Розбір",
+    correct:"Правильно", your:"Твоя відповідь", right_is:"Правильна відповідь", no_answer:"немає відповіді",
+    tf_true:"Prawda", tf_false:"Fałsz", in_text:"У тексті:",
+    play:"▶ Слухати", playing:"Звучить…", plays_left:"прослуховувань залишилось", show_tr:"Показати текст запису",
+    no_voice:"У браузері немає польського голосу для синтезатора. Відкрий сторінку в Chrome або Edge, або встанови польський голос у системі. Поки що можна прочитати текст запису.",
+    pass:"Зараховано (≥ 60%)", fail:"Поки нижче 60% — ще трохи практики",
+    w_title:"Письмо", w_p:"Обери тип тексту і завдання. Спершу подивись шаблон, потім пиши з таймером. Кліком по фразі вона вставляється в текст.",
+    short:"коротке", long:"довге", words:"слів", target:"ціль", min:"хв",
+    tab_tpl:"Шаблон", tab_phr:"Банк фраз", tab_model:"Зразок", tab_check:"Чек-лист",
+    insert_skel:"Вставити каркас у текст", model_warn:"Спершу спробуй написати сам(а) — так запам'ятовується краще.", show_model:"Показати зразок",
+    timer_start:"Старт", timer_pause:"Пауза", timer_reset:"Скинути",
+    save:"Зберегти спробу", saved:"Спробу збережено", draft:"Чернетка зберігається автоматично",
+    auto:"Автоперевірка", h_words_low:"Замало слів — допиши", h_words_ok:"Обсяг у нормі", h_words_high:"Забагато слів — скороти",
+    h_greet_ok:"Є звертання", h_greet_no:"Немає звертання на початку", h_bye_ok:"Є прощання", h_bye_no:"Немає прощання / підпису",
+    h_formal_bad:"В офіційному листі «Cześć / Pozdrawiam / Ty» — помилка стилю", h_formal_ok:"Офіційний стиль витримано",
+    h_conn_ok:"Сполучників достатньо", h_conn_no:"Додай сполучники: ponieważ, ale, więc, poza tym",
+    h_head_ok:"Є заголовок", h_head_no:"Додай заголовок великими літерами (SPRZEDAM…)",
+    h_opinion_ok:"Є твоя думка", h_opinion_no:"Немає думки: Moim zdaniem / Uważam, że…",
+    points:"Пункти завдання", history:"Твої спроби", checks_done:"чек-лист",
+    disclaimer:"Неофіційний тренажер. Всі завдання авторські, це не копії офіційних тестів. Офіційні зразки і правила іспиту: ",
+    progress_note:"Прогрес зберігається тільки в цьому браузері.", reset:"Скинути прогрес", reset_q:"Видалити весь прогрес і чернетки?",
+    tip1:"Сьогодні: одне оголошення за 15 хвилин. Обов'язково всі пункти завдання + контакт.",
+    tip2:"Сьогодні: блок граматики. Прочитай пояснення до кожної помилки.",
+    tip3:"Сьогодні: висловлення (wypowiedź). Вступ → 2 аргументи з прикладом → Podsumowując.",
+    tip4:"Сьогодні: аудіювання. Спершу прочитай питання, потім вмикай запис.",
+    tip5:"Сьогодні: офіційний лист. Szanowni Państwo… Z poważaniem — і жодного «Cześć».",
+    tip_m:"У тебе є помилки в банку — 10 хвилин на повторення."
+  },
+  ru: {
+    nav_home:"Главная", nav_g:"Грамматика", nav_r:"Чтение", nav_l:"Аудирование", nav_w:"Письмо",
+    hero_t:"Подготовка к экзамену по польскому B1", hero_p:"Тесты с таймером, объяснения ошибок по-русски и тренажёр письма с шаблонами и банком фраз. Учись блоками по 15 минут.",
+    days:"дней до экзамена", exam_date:"Письменная часть: 5 декабря 2026", start_block:"Начать 15-минутный блок", today:"Совет на сегодня",
+    sec_g:"Грамматика", sec_r:"Чтение", sec_l:"Аудирование", sec_w:"Письмо",
+    sec_g_d:"Падежи, вид глагола, числительные, предлоги. Объяснение каждой ошибки.",
+    sec_r_d:"Объявления, письма, статьи. Вопросы с выбором и «правда / ложь».",
+    sec_l_d:"Диалоги и объявления озвучивает синтезатор (pl-PL). Как на экзамене — максимум 2 прослушивания.",
+    sec_w_d:"Главная фишка: шаблоны, банк фраз, счётчик слов, таймер и чек-лист самопроверки.",
+    best:"Лучший результат", attempts:"Попыток", none:"пока нет", texts:"текстов",
+    mistakes:"Повторить ошибки", mistakes_n:"ошибок в банке",
+    mode_block:"Блок 15 мин", mode_block_d:"Случайная часть заданий", mode_full:"Полный вариант", mode_full_d:"Все задания раздела",
+    start:"Начать", finish:"Завершить и проверить", time_up:"Время вышло — проверяем!", left:"осталось",
+    answered:"ответов", score:"Результат", again:"Ещё раз", home:"На главную", review:"Разбор",
+    correct:"Верно", your:"Твой ответ", right_is:"Правильный ответ", no_answer:"нет ответа",
+    tf_true:"Prawda", tf_false:"Fałsz", in_text:"В тексте:",
+    play:"▶ Слушать", playing:"Звучит…", plays_left:"прослушиваний осталось", show_tr:"Показать текст записи",
+    no_voice:"В браузере нет польского голоса для синтезатора. Открой страницу в Chrome или Edge, либо установи польский голос в системе. Пока можно прочитать текст записи.",
+    pass:"Зачёт (≥ 60%)", fail:"Пока ниже 60% — ещё немного практики",
+    w_title:"Письмо", w_p:"Выбери тип текста и задание. Сначала посмотри шаблон, потом пиши с таймером. Клик по фразе вставляет её в текст.",
+    short:"короткий", long:"длинный", words:"слов", target:"цель", min:"мин",
+    tab_tpl:"Шаблон", tab_phr:"Банк фраз", tab_model:"Образец", tab_check:"Чек-лист",
+    insert_skel:"Вставить каркас в текст", model_warn:"Сначала попробуй написать сам(а) — так запоминается лучше.", show_model:"Показать образец",
+    timer_start:"Старт", timer_pause:"Пауза", timer_reset:"Сброс",
+    save:"Сохранить попытку", saved:"Попытка сохранена", draft:"Черновик сохраняется автоматически",
+    auto:"Автопроверка", h_words_low:"Мало слов — допиши", h_words_ok:"Объём в норме", h_words_high:"Слишком много слов — сократи",
+    h_greet_ok:"Есть обращение", h_greet_no:"Нет обращения в начале", h_bye_ok:"Есть прощание", h_bye_no:"Нет прощания / подписи",
+    h_formal_bad:"В официальном письме «Cześć / Pozdrawiam / Ty» — ошибка стиля", h_formal_ok:"Официальный стиль выдержан",
+    h_conn_ok:"Связок достаточно", h_conn_no:"Добавь связки: ponieważ, ale, więc, poza tym",
+    h_head_ok:"Есть заголовок", h_head_no:"Добавь заголовок крупными буквами (SPRZEDAM…)",
+    h_opinion_ok:"Есть твоё мнение", h_opinion_no:"Нет мнения: Moim zdaniem / Uważam, że…",
+    points:"Пункты задания", history:"Твои попытки", checks_done:"чек-лист",
+    disclaimer:"Неофициальный тренажёр. Все задания авторские, это не копии официальных тестов. Официальные образцы и правила экзамена: ",
+    progress_note:"Прогресс хранится только в этом браузере.", reset:"Сбросить прогресс", reset_q:"Удалить весь прогресс и черновики?",
+    tip1:"Сегодня: одно объявление за 15 минут. Обязательно все пункты задания + контакт.",
+    tip2:"Сегодня: блок грамматики. Прочитай объяснение к каждой ошибке.",
+    tip3:"Сегодня: высказывание (wypowiedź). Вступление → 2 аргумента с примером → Podsumowując.",
+    tip4:"Сегодня: аудирование. Сначала прочитай вопросы, потом включай запись.",
+    tip5:"Сегодня: официальное письмо. Szanowni Państwo… Z poważaniem — и никакого «Cześć».",
+    tip_m:"У тебя есть ошибки в банке — 10 минут на повторение."
+  }
+};
+
+/* ================= state ================= */
+const KEY = "zdamb1:v1";
+const S = Object.assign({ lang: "ua", res: { g: [], r: [], l: [] }, miss: [], drafts: {}, essays: [] },
+  JSON.parse(localStorage.getItem(KEY) || "{}"));
+const save = () => localStorage.setItem(KEY, JSON.stringify(S));
+const t = k => (T[S.lang] && T[S.lang][k]) || T.ua[k] || k;
+const L = o => (o && (o[S.lang] || o.ua)) || "";
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const app = $("#app");
+let cleanup = [];
+function onLeave(fn) { cleanup.push(fn); }
+function toast(msg) { const el = $("#toast"); el.textContent = msg; el.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove("show"), 2200); }
+const EXAM = new Date(2026, 11, 5);
+const daysLeft = () => Math.max(0, Math.ceil((EXAM - new Date(new Date().toDateString())) / 864e5));
+const pct = (a, b) => b ? Math.round(a / b * 100) : 0;
+const fmt = s => `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
+
+/* ================= chrome ================= */
+function renderChrome(route) {
+  const items = [["#/", "nav_home"], ["#/test/g", "nav_g"], ["#/test/r", "nav_r"], ["#/test/l", "nav_l"], ["#/write", "nav_w"]];
+  $("#nav").innerHTML = items.map(([h, k]) => {
+    const on = h === "#/" ? route === "" : ("#/" + route).startsWith(h);
+    return `<a href="${h}" class="${on ? "on" : ""}">${t(k)}</a>`;
+  }).join("");
+  document.querySelectorAll(".lang button").forEach(b => b.classList.toggle("on", b.dataset.lang === S.lang));
+  document.documentElement.lang = S.lang === "ru" ? "ru" : "uk";
+  $("#foot").innerHTML = `${t("disclaimer")}<a href="https://certyfikatpolski.pl" target="_blank" rel="noopener">certyfikatpolski.pl</a>. ${t("progress_note")}
+    <button class="btn small" id="reset" style="margin-left:8px">${t("reset")}</button>`;
+  $("#reset").onclick = () => { if (confirm(t("reset_q"))) { localStorage.removeItem(KEY); location.hash = "#/"; location.reload(); } };
+}
+document.querySelectorAll(".lang button").forEach(b => b.onclick = () => { S.lang = b.dataset.lang; save(); route(); });
+
+/* ================= home ================= */
+function stat(k) {
+  const r = S.res[k] || [];
+  if (!r.length) return { best: null, n: 0 };
+  return { best: Math.max(...r.map(x => pct(x.s, x.t))), n: r.length };
+}
+function home() {
+  const tips = ["tip1", "tip2", "tip3", "tip4", "tip5"];
+  const tip = S.miss.length >= 5 ? "tip_m" : tips[new Date().getDate() % tips.length];
+  const sections = [
+    ["g", "📘", "sec_g", "sec_g_d", B1.grammar.length + " ✎"],
+    ["r", "📄", "sec_r", "sec_r_d", B1.reading.length + " " + t("texts")],
+    ["l", "🎧", "sec_l", "sec_l_d", B1.listening.length + " ▶"]
+  ];
+  const ws = S.essays.length;
+  app.innerHTML = `
+  <section class="hero">
+    <div class="card">
+      <span class="label">Egzamin certyfikatowy · B1</span>
+      <h1 style="margin:8px 0 10px">${t("hero_t")}</h1>
+      <p class="muted" style="margin:0 0 16px">${t("hero_p")}</p>
+      <div class="row">
+        <a class="btn primary" href="#/write">${t("sec_w")} ✍</a>
+        <a class="btn" href="#/test/g">${t("start_block")}</a>
+      </div>
+      <p style="margin:16px 0 0;font-size:.94rem"><b>${t("today")}:</b> ${t(tip)}</p>
+    </div>
+    <div class="card count">
+      <div class="big">${daysLeft()}</div>
+      <div style="font-weight:600;margin-top:6px">${t("days")}</div>
+      <div class="muted" style="font-size:.9rem;margin-top:4px">${t("exam_date")}</div>
+    </div>
+  </section>
+  <section class="grid g4">
+    <a class="card sec star" href="#/write">
+      <span class="ico">✍️</span><h3>${t("sec_w")} <span class="pill red">TOP</span></h3>
+      <p class="muted" style="margin:0;font-size:.92rem">${t("sec_w_d")}</p>
+      <span class="spacer"></span>
+      <span class="label">${t("attempts")}: ${ws} · ${B1.writingTasks.length} ✎</span>
+    </a>
+    ${sections.map(([k, ico, ti, d, n]) => { const s = stat(k); return `
+    <a class="card sec" href="#/test/${k}">
+      <span class="ico">${ico}</span><h3>${t(ti)}</h3>
+      <p class="muted" style="margin:0;font-size:.92rem">${t(d)}</p>
+      <span class="spacer"></span>
+      <div class="bar"><i style="width:${s.best || 0}%"></i></div>
+      <span class="label">${t("best")}: ${s.best === null ? t("none") : s.best + "%"} · ${t("attempts")}: ${s.n} · ${n}</span>
+    </a>`; }).join("")}
+  </section>
+  ${S.miss.length ? `<div class="card row" style="margin-top:16px">
+    <div><b>${t("mistakes")}</b><div class="muted" style="font-size:.9rem">${S.miss.length} ${t("mistakes_n")}</div></div>
+    <span class="spacer"></span><a class="btn primary" href="#/test/m">${t("start")}</a></div>` : ""}`;
+}
+
+/* ================= tests ================= */
+/* Build a flat list of question objects for a section */
+function buildItems(sec, full) {
+  if (sec === "g" || sec === "m") {
+    let pool = sec === "m" ? B1.grammar.filter(g => S.miss.includes(g.id)) : B1.grammar;
+    pool = shuffle(pool);
+    if (!full) pool = pool.slice(0, 15);
+    return { minutes: full ? Math.max(15, pool.length) : 15, groups: [{ items: pool.map(g => ({ key: g.id, q: g.q, o: g.o, ex: g.ex })) }] };
+  }
+  const src = sec === "r" ? B1.reading : B1.listening;
+  const pick = full ? src : shuffle(src).slice(0, sec === "r" ? 2 : 3);
+  return {
+    minutes: full ? (sec === "r" ? 45 : 30) : 15,
+    groups: pick.map(x => ({ src: x, items: x.qs.map((q, i) => ({ key: x.id + ":" + i, q: q.q, o: q.o, tf: q.tf, hint: q.hint })) }))
+  };
+}
+
+function testIntro(sec) {
+  const title = { g: "sec_g", r: "sec_r", l: "sec_l", m: "mistakes" }[sec];
+  if (sec === "m") return runTest(sec, true);
+  app.innerHTML = `<h1>${t(title)}</h1><p class="muted">${t("sec_" + sec + "_d")}</p>
+  <div class="grid g2" style="margin-top:18px">
+    <button class="card sec" data-full="0" style="text-align:left;cursor:pointer">
+      <span class="ico">⏱</span><h3>${t("mode_block")}</h3><p class="muted" style="margin:0">${t("mode_block_d")}</p></button>
+    <button class="card sec" data-full="1" style="text-align:left;cursor:pointer">
+      <span class="ico">📋</span><h3>${t("mode_full")}</h3><p class="muted" style="margin:0">${t("mode_full_d")}</p></button>
+  </div>`;
+  app.querySelectorAll("[data-full]").forEach(b => b.onclick = () => runTest(sec, b.dataset.full === "1"));
+}
+
+function runTest(sec, full) {
+  const data = buildItems(sec, full);
+  const all = data.groups.flatMap(g => g.items);
+  if (!all.length) { location.hash = "#/"; return; }
+  const ans = {};
+  let left = data.minutes * 60, done = false, n = 0;
+  // pre-shuffle options once
+  all.forEach(it => { if (it.o) it.view = shuffle(it.o.map((text, i) => ({ text, ok: i === 0 }))); else it.view = [{ text: t("tf_true"), ok: it.tf === true }, { text: t("tf_false"), ok: it.tf === false }]; });
+
+  const qHtml = it => `<div class="q" data-k="${it.key}">
+      <div class="qt"><span class="num">${++n}.</span>${esc(it.q).replace("___", "<b>_____</b>")}</div>
+      <div class="opts ${it.o ? "" : "tf"}">${it.view.map((v, i) => `
+        <label class="opt"><input type="radio" name="${it.key}" value="${i}"><span>${esc(v.text)}</span></label>`).join("")}</div>
+      <div class="fb"></div></div>`;
+
+  let body = "";
+  data.groups.forEach((g, gi) => {
+    if (sec === "r") body += `<div class="split" style="margin-bottom:26px"><div class="stick"><span class="label">${esc(g.src.kind)}</span><h2 style="margin:4px 0 10px">${esc(g.src.title)}</h2><div class="text">${esc(g.src.text)}</div></div><div>${g.items.map(qHtml).join("")}</div></div>`;
+    else if (sec === "l") body += `<div style="margin-bottom:26px"><h2>${gi + 1}. ${esc(g.src.title)}</h2>
+        <div class="player" data-rec="${gi}"><button class="btn primary small play">${t("play")}</button><span class="muted plays">2 ${t("plays_left")}</span></div>
+        ${g.items.map(qHtml).join("")}<div class="tr" hidden></div></div>`;
+    else body += g.items.map(qHtml).join("");
+  });
+
+  app.innerHTML = `<div class="testhead row">
+      <b>${t({ g: "sec_g", r: "sec_r", l: "sec_l", m: "mistakes" }[sec])}</b>
+      <span class="muted" id="cnt">0 / ${all.length} ${t("answered")}</span><span class="spacer"></span>
+      <span class="timer" id="timer">${fmt(left)}</span>
+      <button class="btn primary small" id="finish">${t("finish")}</button></div>
+    ${sec === "l" && !plVoice() ? `<div class="hint bad" style="margin-bottom:12px">${t("no_voice")}</div>` : ""}
+    <div id="qs">${body}</div>
+    <div class="row" style="margin-top:20px"><span class="spacer"></span><button class="btn primary" id="finish2">${t("finish")}</button></div>`;
+
+  app.querySelectorAll(".opt input").forEach(inp => inp.onchange = () => {
+    if (done) return;
+    ans[inp.name] = +inp.value;
+    inp.closest(".opts").querySelectorAll(".opt").forEach(o => o.classList.toggle("sel", o.contains(inp)));
+    $("#cnt").textContent = `${Object.keys(ans).length} / ${all.length} ${t("answered")}`;
+  });
+
+  if (sec === "l") data.groups.forEach((g, gi) => {
+    const box = app.querySelector(`[data-rec="${gi}"]`);
+    let plays = 2;
+    box.querySelector(".play").onclick = async e => {
+      const btn = e.currentTarget;
+      if (plays <= 0 || btn.disabled) return;
+      if (!plVoice()) { showTranscript(gi); return; }
+      plays--; btn.disabled = true; btn.textContent = t("playing");
+      await speak(g.src.lines);
+      btn.textContent = t("play"); btn.disabled = plays <= 0;
+      box.querySelector(".plays").textContent = `${plays} ${t("plays_left")}`;
+    };
+    const tr = box.parentElement.querySelector(".tr");
+    tr.innerHTML = `<div class="transcript">${g.src.lines.map(([v, s]) => `<p><b>${v}:</b> ${esc(s)}</p>`).join("")}</div>`;
+    if (!plVoice()) box.insertAdjacentHTML("beforeend", `<button class="btn small show-tr">${t("show_tr")}</button>`);
+    const st = box.querySelector(".show-tr"); if (st) st.onclick = () => showTranscript(gi);
+  });
+  function showTranscript(gi) { app.querySelectorAll(".tr")[gi].hidden = false; }
+
+  const tick = setInterval(() => {
+    if (done) return;
+    left--; const el = $("#timer"); if (!el) return;
+    el.textContent = fmt(Math.max(0, left)); el.classList.toggle("low", left <= 60);
+    if (left <= 0) { toast(t("time_up")); finish(); }
+  }, 1000);
+  onLeave(() => { clearInterval(tick); speechSynthesis && speechSynthesis.cancel(); });
+
+  function finish() {
+    if (done) return; done = true; clearInterval(tick);
+    if (window.speechSynthesis) speechSynthesis.cancel();
+    let s = 0;
+    all.forEach(it => {
+      const box = app.querySelector(`.q[data-k="${it.key}"]`);
+      const chosen = ans[it.key];
+      const ok = chosen !== undefined && it.view[chosen].ok;
+      if (ok) s++;
+      box.querySelectorAll("input").forEach(i => i.disabled = true);
+      box.querySelectorAll(".opt").forEach((o, i) => { o.classList.remove("sel"); if (it.view[i].ok) o.classList.add("right"); else if (i === chosen) o.classList.add("wrong"); });
+      let fb = "";
+      if (it.ex) fb = L(it.ex);
+      else if (it.hint) fb = `${t("in_text")} «${esc(it.hint)}»`;
+      if (!ok || it.ex) box.querySelector(".fb").innerHTML = fb ? `<div class="expl ${ok ? "" : "bad"}">${ok ? "✓ " : (chosen === undefined ? t("no_answer") + ". " : "")}${fb}</div>` : "";
+      // grammar mistakes bank
+      if (it.ex) {
+        const i = S.miss.indexOf(it.key);
+        if (!ok && i < 0) S.miss.push(it.key);
+        if (ok && i >= 0) S.miss.splice(i, 1);
+      }
+    });
+    if (sec === "l") app.querySelectorAll(".tr").forEach(x => x.hidden = false);
+    const k = sec === "m" ? "g" : sec;
+    S.res[k].push({ d: Date.now(), s, t: all.length });
+    save();
+    const p = pct(s, all.length);
+    $("#finish").remove(); $("#finish2").parentElement.remove();
+    app.insertAdjacentHTML("afterbegin", `<div class="card result" style="margin-bottom:18px">
+      <span class="label">${t("score")}</span><div class="big">${s} / ${all.length}</div>
+      <p><span class="pill ${p >= 60 ? "ok" : "warn"}">${p}% · ${p >= 60 ? t("pass") : t("fail")}</span></p>
+      <div class="row" style="justify-content:center"><button class="btn primary" id="again">${t("again")}</button><a class="btn" href="#/">${t("home")}</a>
+      ${S.miss.length ? `<a class="btn" href="#/test/m">${t("mistakes")} (${S.miss.length})</a>` : ""}</div></div>`);
+    $("#again").onclick = () => route();
+    window.scrollTo({ top: 0 });
+  }
+  $("#finish").onclick = finish; $("#finish2").onclick = finish;
+}
+
+/* ================= speech ================= */
+let voicesCache = [];
+function loadVoices() { if (window.speechSynthesis) voicesCache = speechSynthesis.getVoices(); }
+if (window.speechSynthesis) { loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
+function plVoice() { return voicesCache.find(v => /^pl(-|_|$)/i.test(v.lang)); }
+function speak(lines) {
+  return new Promise(res => {
+    const v = plVoice(); const pls = voicesCache.filter(x => /^pl/i.test(x.lang));
+    speechSynthesis.cancel();
+    lines.forEach(([who, text], i) => {
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = "pl-PL"; u.voice = (who === "B" && pls[1]) ? pls[1] : v;
+      u.rate = 0.92; u.pitch = (who === "B" && !pls[1]) ? 0.8 : 1.05;
+      if (i === lines.length - 1) { u.onend = res; u.onerror = res; }
+      speechSynthesis.speak(u);
+    });
+  });
+}
+
+/* ================= writing ================= */
+function writeList() {
+  const groups = Object.entries(B1.writingTypes);
+  app.innerHTML = `<h1>${t("w_title")} ✍️</h1><p class="muted" style="max-width:720px">${t("w_p")}</p>
+  ${groups.map(([k, ty]) => `
+    <section style="margin-top:26px">
+      <div class="row"><h2>${ty.name}</h2><span class="pill ${ty.size === "short" ? "" : "red"}">${t(ty.size)} · ${ty.words[0]}–${ty.words[1]} ${t("words")}</span></div>
+      <p class="muted" style="margin:6px 0 12px">${L(ty.about)}</p>
+      <div class="tasks">${B1.writingTasks.filter(x => x.type === k).map(x => {
+        const tries = S.essays.filter(e => e.id === x.id).length;
+        const dr = (S.drafts[x.id] || "").trim();
+        return `<a class="card task" href="#/write/${x.id}">
+          <b>${esc(x.title)}</b><span class="muted" style="font-size:.9rem">${esc(x.prompt)}</span>
+          <span class="row" style="margin-top:4px">${tries ? `<span class="pill ok">✓ ${tries}</span>` : ""}${dr ? `<span class="pill warn">✎ ${wordCount(dr)} ${t("words")}</span>` : ""}</span></a>`;
+      }).join("")}</div>
+    </section>`).join("")}`;
+}
+
+function wordCount(s) { return (s.match(/[\p{L}\p{N}]+(?:[-'’][\p{L}\p{N}]+)*/gu) || []).length; }
+
+function writeTask(id) {
+  const task = B1.writingTasks.find(x => x.id === id);
+  if (!task) { location.hash = "#/write"; return; }
+  const ty = B1.writingTypes[task.type];
+  const allChecks = [...task.points.map(p => ({ pl: p })), ...ty.checks, ...B1.commonChecks];
+  let tab = "tpl", modelShown = false;
+  let left = ty.minutes * 60, running = false, tick = null;
+
+  app.innerHTML = `
+  <div class="row" style="margin-bottom:12px"><a href="#/write" class="btn small">← ${t("w_title")}</a>
+    <span class="pill ${ty.size === "short" ? "" : "red"}">${ty.name} · ${t(ty.size)}</span></div>
+  <div class="wgrid">
+    <div>
+      <div class="prompt">
+        <span class="label">Polecenie</span>
+        <h2 style="margin:4px 0 8px">${esc(task.title)}</h2>
+        <p style="margin:0">${esc(task.prompt)}</p>
+        <p style="margin:10px 0 0"><b>Napisz:</b></p>
+        <ul>${task.points.map(p => `<li>${esc(p)}</li>`).join("")}</ul>
+        <p class="muted" style="margin:10px 0 0;font-size:.9rem">${t("target")}: ${ty.words[0]}–${ty.words[1]} ${t("words")} · ${ty.minutes} ${t("min")}</p>
+      </div>
+      <div class="tabs" id="tabs">
+        <button data-tab="tpl">${t("tab_tpl")}</button><button data-tab="phr">${t("tab_phr")}</button>
+        <button data-tab="check">${t("tab_check")}</button><button data-tab="model">${t("tab_model")}</button>
+      </div>
+      <div class="tabpane" id="pane"></div>
+    </div>
+    <div class="editor">
+      <div class="row" style="margin-bottom:8px">
+        <span class="timer" id="wtimer">${fmt(left)}</span>
+        <button class="btn small" id="tgo">${t("timer_start")}</button>
+        <button class="btn small" id="treset">${t("timer_reset")}</button>
+        <span class="spacer"></span>
+        <span class="wc" id="wc">0</span><span class="muted">/ ${ty.words[0]}–${ty.words[1]} ${t("words")}</span>
+      </div>
+      <textarea class="essay" id="essay" spellcheck="false" lang="pl" placeholder="Pisz tutaj po polsku…"></textarea>
+      <div class="bar" style="margin:8px 0"><i id="wbar" style="width:0"></i></div>
+      <span class="label">${t("auto")}</span>
+      <div class="hints" id="hints"></div>
+      <div class="row"><span class="muted" style="font-size:.85rem">${t("draft")}</span><span class="spacer"></span>
+        <button class="btn primary" id="wsave">${t("save")}</button></div>
+      <div id="hist" style="margin-top:14px"></div>
+    </div>
+  </div>`;
+
+  const ta = $("#essay");
+  ta.value = S.drafts[id] || "";
+
+  function renderPane() {
+    document.querySelectorAll("#tabs button").forEach(b => b.classList.toggle("on", b.dataset.tab === tab));
+    const pane = $("#pane");
+    if (tab === "tpl") {
+      pane.innerHTML = ty.parts.map((p, i) => `<div class="part"><b class="n">${i + 1}</b><div><b>${p.pl}</b> — <span class="muted">${S.lang === "ru" ? p.ru : p.ua}</span><code>${esc(p.ex)}</code></div></div>`).join("")
+        + `<button class="btn small" id="skel" style="margin-top:12px">${t("insert_skel")}</button>`;
+      $("#skel").onclick = () => { insertText((ta.value.trim() ? "\n\n" : "") + ty.skeleton); };
+    } else if (tab === "phr") {
+      const li = S.lang === "ru" ? 2 : 1;
+      pane.innerHTML = B1.phrases.map(g => `<div class="phr-group"><span class="label">${L(g.group)}</span><div class="phr">
+        ${g.items.map(it => `<button data-p="${esc(it[0])}">${esc(it[0])}<small>${esc(it[li])}</small></button>`).join("")}</div></div>`).join("");
+      pane.querySelectorAll("[data-p]").forEach(b => b.onclick = () => insertText(b.dataset.p.split(" / ")[0].replace(/ …$/, " ")));
+    } else if (tab === "check") {
+      const st = S.drafts[id + ":chk"] || [];
+      pane.innerHTML = `<div class="checks">
+        <span class="label">${t("points")}</span>
+        ${allChecks.map((c, i) => `${i === task.points.length ? `<span class="label" style="display:block;margin-top:10px">${t("checks_done")}</span>` : ""}
+          <label><input type="checkbox" data-i="${i}" ${st[i] ? "checked" : ""}><span>${c.pl ? esc(c.pl) : L(c)}</span></label>`).join("")}</div>`;
+      pane.querySelectorAll("input").forEach(c => c.onchange = () => {
+        const arr = S.drafts[id + ":chk"] || []; arr[+c.dataset.i] = c.checked; S.drafts[id + ":chk"] = arr; save();
+      });
+    } else {
+      pane.innerHTML = modelShown ? `<div class="model">${esc(task.model)}</div><p class="muted" style="font-size:.85rem">${wordCount(task.model)} ${t("words")}</p>`
+        : `<p class="muted">${t("model_warn")}</p><button class="btn" id="showm">${t("show_model")}</button>`;
+      const b = $("#showm"); if (b) b.onclick = () => { modelShown = true; renderPane(); };
+    }
+  }
+  document.querySelectorAll("#tabs button").forEach(b => b.onclick = () => { tab = b.dataset.tab; renderPane(); });
+
+  function insertText(txt) {
+    const s = ta.selectionStart ?? ta.value.length, e = ta.selectionEnd ?? s;
+    const before = ta.value.slice(0, s), after = ta.value.slice(e);
+    const pad = before && !/\s$/.test(before) && !/^\n/.test(txt) ? " " : "";
+    ta.value = before + pad + txt + after;
+    const pos = (before + pad + txt).length;
+    ta.focus(); ta.setSelectionRange(pos, pos); update();
+  }
+
+  function analyse(text) {
+    const w = wordCount(text), H = [];
+    const [lo, hi] = ty.words;
+    H.push(w < lo ? ["bad", t("h_words_low") + ` (${w}/${lo})`] : w > hi ? ["bad", t("h_words_high") + ` (${w}/${hi})`] : ["ok", t("h_words_ok") + ` (${w})`]);
+    const first = text.trim().split("\n").find(x => x.trim()) || "";
+    if (task.type === "ogloszenie") {
+      const head = first.trim();
+      H.push(head.length > 3 && head === head.toUpperCase() && /\p{L}/u.test(head) ? ["ok", t("h_head_ok")] : ["bad", t("h_head_no")]);
+    } else {
+      const greet = /(cześć|drog[aiy]|szanown|witaj|hej|dzień dobry)/i.test(text.slice(0, 160));
+      H.push(greet ? ["ok", t("h_greet_ok")] : ["bad", t("h_greet_no")]);
+      if (task.type !== "wypowiedz") {
+        const bye = /(pozdrawiam|pozdrowienia|z poważaniem|ściskam|do zobaczenia|całuję|trzymaj się|buziaki)/i.test(text.slice(-200));
+        H.push(bye ? ["ok", t("h_bye_ok")] : ["bad", t("h_bye_no")]);
+      }
+    }
+    if (task.type === "wypowiedz") {
+      H.pop(); // wypowiedź nie potrzebuje powitania
+      H.push(/(moim zdaniem|uważam, że|uważam że|wydaje mi się|według mnie|myślę, że|myślę że)/i.test(text) || task.id === "w12" ? ["ok", t("h_opinion_ok")] : ["bad", t("h_opinion_no")]);
+    }
+    if (task.type === "formalny" && w > 3) {
+      const bad = /(?<!\p{L})(cześć|hej|pozdrawiam|ściskam|ty|cię|ci|ciebie|tobie|twój|twoja|twoje|twojego|twoim)(?!\p{L})/iu.test(text);
+      H.push(bad ? ["bad", t("h_formal_bad")] : ["ok", t("h_formal_ok")]);
+    }
+    if (ty.size === "long" || task.type === "email") {
+      const conn = (text.match(/(?<!\p{L})(ponieważ|bo|ale|więc|dlatego|jednak|chociaż|poza tym|przede wszystkim|na przykład|z drugiej strony|z jednej strony|podsumowując|najpierw|potem|kiedy|jeśli|jeżeli|żeby|oraz|a także|również|z tego powodu|w związku z tym|niestety)(?!\p{L})/giu) || []).length;
+      const need = ty.size === "long" ? 4 : 2;
+      H.push(conn >= need ? ["ok", t("h_conn_ok") + ` (${conn})`] : ["bad", t("h_conn_no") + ` (${conn}/${need})`]);
+    }
+    return { w, H };
+  }
+
+  function update() {
+    S.drafts[id] = ta.value; save();
+    const { w, H } = analyse(ta.value);
+    $("#wc").textContent = w;
+    const [lo, hi] = ty.words;
+    const bar = $("#wbar"); bar.style.width = Math.min(100, w / lo * 100) + "%";
+    bar.style.background = w > hi ? "var(--warn)" : w >= lo ? "var(--ok)" : "var(--red)";
+    $("#hints").innerHTML = ta.value.trim() ? H.map(([c, m]) => `<div class="hint ${c}">${c === "ok" ? "✓" : "!"} ${m}</div>`).join("") : "";
+  }
+  ta.addEventListener("input", update);
+
+  function renderHist() {
+    const list = S.essays.filter(e => e.id === id).slice(-5).reverse();
+    $("#hist").innerHTML = list.length ? `<span class="label">${t("history")}</span>` + list.map(e =>
+      `<details style="margin-top:6px"><summary>${new Date(e.d).toLocaleString(S.lang === "ru" ? "ru-RU" : "uk-UA", { dateStyle: "short", timeStyle: "short" })} · ${e.w} ${t("words")}${e.time ? " · " + fmt(e.time) : ""}</summary><div class="model" style="margin-top:6px">${esc(e.text)}</div></details>`).join("") : "";
+  }
+
+  $("#wsave").onclick = () => {
+    if (!ta.value.trim()) return;
+    S.essays.push({ id, d: Date.now(), w: wordCount(ta.value), text: ta.value, time: ty.minutes * 60 - left });
+    save(); renderHist(); toast(t("saved"));
+  };
+
+  const tEl = $("#wtimer");
+  function setRun(on) {
+    running = on; $("#tgo").textContent = on ? t("timer_pause") : t("timer_start");
+    clearInterval(tick);
+    if (on) tick = setInterval(() => {
+      left--; tEl.textContent = fmt(Math.max(0, left)); tEl.classList.toggle("low", left <= 60);
+      if (left <= 0) { setRun(false); toast(t("time_up")); }
+    }, 1000);
+  }
+  $("#tgo").onclick = () => setRun(!running);
+  $("#treset").onclick = () => { setRun(false); left = ty.minutes * 60; tEl.textContent = fmt(left); tEl.classList.remove("low"); };
+  onLeave(() => clearInterval(tick));
+
+  renderPane(); update(); renderHist();
+}
+
+/* ================= router ================= */
+function route() {
+  cleanup.forEach(f => f()); cleanup = [];
+  const h = location.hash.replace(/^#\/?/, "");
+  const [a, b] = h.split("/");
+  renderChrome(h);
+  if (a === "test" && ["g", "r", "l", "m"].includes(b)) testIntro(b);
+  else if (a === "write" && b) writeTask(b);
+  else if (a === "write") writeList();
+  else home();
+  window.scrollTo({ top: 0 });
+}
+window.addEventListener("hashchange", route);
+route();
+</script>
+</body>
+</html>
