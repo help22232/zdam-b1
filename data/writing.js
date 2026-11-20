@@ -105,7 +105,7 @@ B1.writingTasks = [
     id: "w04", type: "ogloszenie", title: "Lekcje języka ukraińskiego",
     prompt: "Chcesz dorobić, ucząc języka ukraińskiego. Napisz ogłoszenie do lokalnej gazety.",
     points: ["co oferujesz i dla kogo", "jakie masz doświadczenie", "gdzie i kiedy mogą odbywać się lekcje", "cena i kontakt"],
-    model: "LEKCJE JĘZYKA UKRAIŃSKIEGO\n\nJestem rodowitą Ukrainką. Oferuję lekcje języka ukraińskiego dla dzieci i dorosłych, na każdym poziomie. Od trzech lat uczę online, a wcześniej pracowałam w szkole językowej w Kijowie. Lekcje mogą odbywać się u mnie, u ucznia albo przez internet, od poniedziałku do soboty.\n\nCena: 60 zł za 60 minut. Pierwsza lekcja gratis!\nKontakt: e-mail ukrainski.lekcje@przyklad.pl\nOksana"
+    model: "LEKCJE JĘZYKA UKRAIŃSKIEGO\n\nJestem rodowitą Ukrainką. Oferuję lekcje języka ukraińskiego dla dzieci i dorosłych, na każdym poziomie. Od trzech lat uczę online, a wcześniej pracowałam w szkole językowej w Kijowie. Zajęcia mogą odbywać się u mnie, u ucznia albo przez internet, od poniedziałku do soboty.\n\nCena: 60 zł za 60 minut. Pierwsza lekcja gratis!\nKontakt: e-mail ukrainski.lekcje@przyklad.pl\nOksana"
   },
   /* ---------- E-MAILE PRYWATNE ---------- */
   {
@@ -141,13 +141,13 @@ B1.writingTasks = [
   },
   /* ---------- WYPOWIEDZI ---------- */
   {
-    id: "w10", type: "wypowiedz", title: "Małe miasto czy duże miasto?",
+    id: "w10", type: "wypowiedz", opinion: true, title: "Małe miasto czy duże miasto?",
     prompt: "Napisz wypowiedź na temat: „Czy lepiej mieszkać w małym mieście, czy w dużym?”",
     points: ["przedstaw swoje zdanie", "podaj co najmniej dwa argumenty", "podaj przykłady z własnego życia", "podsumuj"],
     model: "Wiele osób uważa, że w dużym mieście żyje się lepiej, bo jest tam więcej pracy i rozrywki. Moim zdaniem jednak małe miasto ma więcej zalet.\n\nPrzede wszystkim życie w małym mieście jest tańsze i spokojniejsze. Na przykład w Sokołowie płacę za mieszkanie dużo mniej niż mój kolega w Warszawie, a do pracy chodzę pieszo, więc nie tracę czasu w korkach.\n\nPoza tym w małym mieście ludzie lepiej się znają i chętnie sobie pomagają. Kiedy przyjechałem do Polski, sąsiedzi pomogli mi znaleźć lekarza i pokazali, gdzie są najlepsze sklepy. Z drugiej strony, jeśli ktoś chce chodzić do teatru albo na koncerty, musi czasem pojechać do większego miasta.\n\nPodsumowując, uważam, że dla rodziny i dla osób, które cenią spokój, małe miasto jest lepszym wyborem."
   },
   {
-    id: "w11", type: "wypowiedz", title: "Nauka języka przez internet",
+    id: "w11", type: "wypowiedz", opinion: true, title: "Nauka języka przez internet",
     prompt: "Napisz wypowiedź na temat: „Czy można nauczyć się języka obcego tylko przez internet?”",
     points: ["przedstaw swoje zdanie", "napisz o zaletach nauki przez internet", "napisz o wadach", "podsumuj i podaj własny przykład"],
     model: "Dzisiaj coraz więcej osób uczy się języków przez internet. Uważam, że to bardzo dobra metoda, ale nie wystarczy, żeby dobrze mówić.\n\nPrzede wszystkim internet daje dużo możliwości. Można oglądać filmy, słuchać podcastów i robić ćwiczenia w aplikacjach, kiedy ma się wolną chwilę, na przykład w autobusie. Poza tym wiele materiałów jest bezpłatnych.\n\nZ drugiej strony w internecie trudno ćwiczyć prawdziwą rozmowę. Aplikacja nie poprawi błędów w mówieniu tak dobrze jak nauczyciel albo kolega. Ja na przykład dużo czytałem po polsku w internecie, ale zacząłem swobodnie mówić dopiero wtedy, gdy codziennie rozmawiałem z kolegami w pracy.\n\nPodsumowując, internet bardzo pomaga w nauce, ale najlepiej łączyć go z rozmowami z ludźmi."

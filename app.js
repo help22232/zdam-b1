@@ -385,7 +385,7 @@ function writeList() {
 }
 
 /* Lokalna analiza tekstu (struktura, styl, typowe błędy) */
-const CONN = /(?<!\p{L})(ponieważ|bo|ale|więc|dlatego|jednak|chociaż|poza tym|przede wszystkim|na przykład|z drugiej strony|z jednej strony|podsumowując|najpierw|potem|kiedy|jeśli|jeżeli|żeby|oraz|a także|również|z tego powodu|w związku z tym|niestety|natomiast|następnie)(?!\p{L})/giu;
+const CONN = /(?<!\p{L})(ponieważ|bo|ale|więc|dlatego|jednak|chociaż|poza tym|przede wszystkim|na przykład|z drugiej strony|z jednej strony|podsumowując|najpierw|potem|kiedy|jeśli|jeżeli|żeby|oraz|a także|również|z tego powodu|w związku z tym|niestety|natomiast|następnie|czyli|mimo to|wtedy|gdy|oprócz tego|na koniec|na zakończenie|zamiast|dlatego że|żebym|żebyś|żebyśmy|aby|gdyby|także|ponadto|w zamian)(?!\p{L})/giu;
 const STOP = new Set("jest jestem będzie było mnie mój moja moje twój twoja jego jej nasz nasza który która które także bardzo tylko jeszcze można przez jako tego tej tym tych oraz albo więc kiedy jeśli żeby ponieważ chciałbym chciałabym proszę".split(" "));
 function analyse(text, task, ty) {
   const H = [], add = (ok, msg) => H.push({ ok, msg });
@@ -400,10 +400,10 @@ function analyse(text, task, ty) {
   if (task.type === "ogloszenie") {
     const h0 = lines[0] || "";
     chk(h0.length > 3 && h0 === h0.toUpperCase() && /\p{L}/u.test(h0), t("h_head_ok"), t("h_head_no"));
-    chk(/(\d{3}[\s-]?\d{3}[\s-]?\d{3}|@|tel\.|telefon|dzwonić|kontakt|SMS|e-mail|mail)/i.test(text), t("h_contact_ok"), t("h_contact_no"));
-  } else {
+    chk(/(\d{3}[\s-]?\d{3}[\s-]?\d{3}|@|tel\.|telefon|dzwonić|kontakt|SMS|e-mail|mail|wiadomoś)/i.test(text), t("h_contact_ok"), t("h_contact_no"));
+  } else if (task.type !== "wypowiedz") {
     chk(lines.slice(0, 3).some(l => /^(cześć|hej|witaj|drog[aiy]|kochan[aiy]|szanown[aiy]|dzień dobry)/i.test(l)), t("h_greet_ok"), t("h_greet_no"));
-    if (task.type !== "wypowiedz") chk(/(pozdrawiam|pozdrowienia|z poważaniem|z wyrazami szacunku|ściskam|do zobaczenia|całuję|trzymaj się|buziaki|do usłyszenia)/i.test(tail), t("h_bye_ok"), t("h_bye_no"));
+    chk(/(pozdrawiam|pozdrowienia|z poważaniem|z wyrazami szacunku|ściskam|do zobaczenia|całuję|trzymaj się|buziaki|do usłyszenia)/i.test(tail), t("h_bye_ok"), t("h_bye_no"));
   }
   if (task.type === "formalny" && w > 3) {
     const bad = /(?<!\p{L})(cześć|hej|pozdrawiam|ściskam|buziaki|ty|cię|ci|ciebie|tobie|tobą|twój|twoja|twoje|twojego|twoim|możesz|chcesz|wiesz|masz|napisz|odpisz|daj znać)(?!\p{L})/iu.test(text);
@@ -412,9 +412,10 @@ function analyse(text, task, ty) {
   }
   if (task.type === "email" && /(szanown|z poważaniem)/i.test(text)) { form.push(false); add(false, t("h_inf_bad")); }
   if (ty.size === "long" || task.type === "email") chk(paras >= (ty.size === "long" ? 3 : 2), t("h_par_ok"), t("h_par_no"));
-  if (task.type === "wypowiedz") {
-    chk(/(moim zdaniem|uważam, że|uważam że|wydaje mi się|według mnie|myślę, że|myślę że|jestem przekonany|jestem przekonana)/i.test(text) || task.id === "w12", t("h_op_ok"), t("h_op_no"));
-    chk(/(podsumowując|reasumując|dlatego uważam|na koniec|w końcu|wsumie|ogólnie rzecz biorąc|ten dzień był)/i.test(text.slice(-Math.max(200, text.length / 3))), t("h_sum_ok"), t("h_sum_no"));
+  if (task.type === "wypowiedz" && task.opinion) {
+    // temat dyskusyjny: potrzebne zdanie i podsumowanie; temat opisowy („Opisz…”) — nie
+    chk(/(moim zdaniem|uważam, że|uważam że|wydaje mi się|według mnie|myślę, że|myślę że|jestem przekonany|jestem przekonana)/i.test(text), t("h_op_ok"), t("h_op_no"));
+    chk(/(podsumowując|reasumując|dlatego uważam|na koniec|na zakończenie|w sumie|ogólnie rzecz biorąc|moim zdaniem|uważam, że)/i.test(text.slice(-Math.max(200, text.length / 3))), t("h_sum_ok"), t("h_sum_no"));
   }
   if (ty.size === "long" || task.type === "email") {
     const conn = (text.match(CONN) || []).length, need = ty.size === "long" ? 4 : 2;
